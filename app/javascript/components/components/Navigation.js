@@ -14,6 +14,16 @@ const Navigation = () => {
         <NavLink to="/about" className="nav-link">
           About Tooth Tale
         </NavLink>
+      </NavItem>      
+      <NavItem>
+        <NavLink to="/indextooth" className="nav-link">
+          See the Tooth Collectors
+        </NavLink>
+      </NavItem>      
+      <NavItem>
+        <NavLink to="/newtooth" className="nav-link">
+          Add a Tooth Collector
+        </NavLink>
       </NavItem>
     </Nav>
   )
