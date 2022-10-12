@@ -214,6 +214,76 @@ const App = () => {
 
 ```
 
+<!-- add react-testing library dependencies -->
+- $ yarn add --dev @testing-library/dom
+- $ yarn add --dev @testing-library/react
+- https://github.com/testing-library/jest-dom
+- $ bundle install
+
+<!-- Create a static test with FileName and extension .test.js  https://testing-library.com/docs/react-testing-library/example-intro  https://github.com/testing-library/jest-dom   -->
+```javascript
+// Home
+import { render, screen } from "@testing-library/react"
+import '@testing-library/jest-dom'
+import Home from "./Home"
+
+describe("<Home />", () => {
+  it("renders without crashing", () => {})
+    const div = document.createElement("div")
+    render(<Home />, div)
+    expect(screen.getByRole('heading')).toHaveTextContent('This is the Home Page')
+})
+
+// Navigation
+// include routing components from react-router-dom
+// access userEvent from React Testing Library that will simulation browser interactions
+// https://testing-library.com/docs/example-react-router/
+// use await to allow link to follow the click action
+
+import {render, screen} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import React from 'react'
+import '@testing-library/jest-dom'
+import App from '../App'
+import Navigation from './Navigation'
+import {BrowserRouter, MemoryRouter} from 'react-router-dom'
+
+describe("<Navigation />", () => {
+
+  it("renders without crashing", () => {
+    const div = document.createElement("div")
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>,
+      div
+    )
+  })
+
+  it('full app rendering/navigating', async () => {
+    render(<App />)
+    const user = userEvent.setup()
+
+    // verify page content for default route
+    expect(screen.getByText(/Welcome to the Tooth Tales from the Fairies Perspective!/i)).toBeInTheDocument()
+
+    // verify page content for expected route after navigating
+    await user.click(screen.getByText(/See the Tooth Collectors/i))
+    expect(screen.getByText(/Greetings from the Tooth Collectors/i)).toBeInTheDocument()
+  })
+
+  it("has clickable links", () => {
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>
+    )
+    userEvent.click(screen.getByText("See the Tooth Collectors"))
+    expect(screen.getByText("Greetings from the Tooth Collectors")).toBeInTheDocument()
+  })
+})
+
+```
 
 ## Troubleshooting
 ```bash
@@ -225,4 +295,12 @@ ReferenceError: App is not
 # Error: component call not defined
 App.js:23 Uncaught ReferenceError: IndexTooth is not defined
 # Correction: Ensure there is an import for the component
+
+# Error with react-strips looking for src folder $ yarn test
+# https://stackoverflow.com/questions/48395804/where-is-create-react-app-webpack-config-and-files
+# Correction: change `src` to `app` in node_modules/react-scripts/scripts/utils/createJestConfig.js
+
+# Error not router component
+    useLocation() may be used only in the context of a <Router> component.
+# Correction ... wrap component in Browser Router
 ```
