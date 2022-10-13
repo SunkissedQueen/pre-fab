@@ -151,3 +151,211 @@ export default Navigation
   </div>
 </body>
 ```
+
+<!-- Add mock data file in app/javascript/components -->
+```javascript 
+const collectors = [
+  {
+    id: 1,
+    name: "Candace Cavity",
+    tenure: 5,
+    power: "stopping gums from bleeding",
+    image:
+      "https://www.google.com/imgres?imgurl=https%3A%2F%2Flive.staticflickr.com%2F55%2F179845929_b9c90a816a_b.jpg&imgrefurl=https%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkaptainkobold%2F179845929&tbnid=y5PP7OuA2601UM&vet=12ahUKEwim1b-Htdf6AhXammoFHYhtDtAQMygNegUIARDzAQ..i&docid=29flFhnkcfZX0M&w=1024&h=768&q=tooth%20fairy&hl=en&ved=2ahUKEwim1b-Htdf6AhXammoFHYhtDtAQMygNegUIARDzAQ"
+  },
+  {
+    id: 2,
+    name: "Monty Molar",
+    tenure: 2,
+    power: "pranking the departed tooth owners by changing the color of their mouth wash",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw59oePCYfNlp_OLJ2LUCRuH-ld61OLVxyGQ&usqp=CAU"
+  },
+  {
+    id: 3,
+    name: "Geneva Gum",
+    tenure: 4,
+    power: "doubling the investment left by parents",
+    image:
+      "https://freesvg.org/img/ComicCharacter101.png"
+  },
+  {
+    id: 4,
+    name: "Steven Sparkle",
+    tenure: 1,
+    power: "making plaque disappear",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAR4MYVxWEY6iUfE01megKnc69P9qByz-F74kgELbEphOEEVEOMNPScg7Ox4nADn8t3_k&usqp=CAU"
+  },
+  {
+    id: 5,
+    name: "Geneva Gum",
+    tenure: 4,
+    power: "doubling the investment left by parents",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX1Co76QOWz6TTEPrK7eovu1yx8Fcud9wYCQ&usqp=CAU"
+  }
+]
+export default collectors
+
+// The mock data can be set into state and passed around our application through App.js
+import React, { useState } from "react"
+import mockCollectors from "./mockCollector"
+
+const App = () => {
+  const [collectors, setCollectors] = useState(mockCollectors)
+
+  console.log(collectors)
+
+// Add index, show, edit, new, and not found files to pages directory and imports/routes to App.js
+      <Route path="/indextooth" element={<IndexTooth />} />
+      <Route path="/showtooth" element={<ShowTooth />} />
+      <Route path="*" element={<NoTeeth />} />
+
+```
+
+<!-- add react-testing library dependencies -->
+- $ yarn add --dev @testing-library/dom
+- $ yarn add --dev @testing-library/react
+- $ yarn add --dev @testing-library/user-event @testing-library/dom
+- https://github.com/testing-library/jest-dom
+- $ bundle install
+
+<!-- Create a static test with FileName and extension .test.js  https://testing-library.com/docs/react-testing-library/example-intro  https://github.com/testing-library/jest-dom   -->
+```javascript
+// Home
+import { render, screen } from "@testing-library/react"
+import '@testing-library/jest-dom'
+import Home from "./Home"
+
+describe("<Home />", () => {
+  it("renders without crashing", () => {})
+    const div = document.createElement("div")
+    render(<Home />, div)
+    expect(screen.getByRole('heading')).toHaveTextContent('This is the Home Page')
+})
+
+// Navigation
+// include routing components from react-router-dom
+// access userEvent from React Testing Library that will simulation browser interactions
+// https://testing-library.com/docs/example-react-router/
+// use await to allow link to follow the click action
+
+import {render, screen} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import React from 'react'
+import '@testing-library/jest-dom'
+import App from '../App'
+import Navigation from './Navigation'
+import {BrowserRouter, MemoryRouter} from 'react-router-dom'
+
+describe("<Navigation />", () => {
+
+  it("renders without crashing", () => {
+    const div = document.createElement("div")
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>,
+      div
+    )
+  })
+
+  it('full app rendering/navigating', async () => {
+    render(<App />)
+    const user = userEvent.setup()
+
+    // verify page content for default route
+    expect(screen.getByText(/Welcome to the Tooth Tales from the Fairies Perspective!/i)).toBeInTheDocument()
+
+    // verify page content for expected route after navigating
+    await user.click(screen.getByText(/See the Tooth Collectors/i))
+    expect(screen.getByText(/Greetings from the Tooth Collectors/i)).toBeInTheDocument()
+  })
+
+  it("has clickable links", () => {
+    render(
+      <BrowserRouter>
+        <Navigation />
+      </BrowserRouter>
+    )
+    userEvent.click(screen.getByText("See the Tooth Collectors"))
+    expect(screen.getByText("Greetings from the Tooth Collectors")).toBeInTheDocument()
+  })
+})
+
+```
+
+## Troubleshooting
+```bash
+# Error: white screen and the following error messages
+fromRequireContextWithGlobalFallback.js:18 Error: Cannot find module
+ReferenceError: App is not 
+# Correction: Ensure path is correct for imports
+
+# Error: component call not defined
+App.js:23 Uncaught ReferenceError: IndexTooth is not defined
+# Correction: Ensure there is an import for the component
+
+# Error with react-strips looking for src folder $ yarn test
+# https://stackoverflow.com/questions/48395804/where-is-create-react-app-webpack-config-and-files
+# Correction: change `src` to `app` in node_modules/react-scripts/scripts/utils/createJestConfig.js
+
+# Error not router component
+    useLocation() may be used only in the context of a <Router> component.
+# Correction: wrap component in Browser Router
+
+# Error
+Warning: Each child in a list should have a unique "key" prop.
+# Correction: key={index} and index parameter on map hof
+```
+https://kentcdodds.com/blog/common-mistakes-with-react-testing-library
+<!-- test image -->
+https://github.com/testing-library/jest-dom#tohaveattribute
+<!-- test not found page -->
+
+
+```javascript
+//  Pass the collector variable from state into the IndexTooth component in src/App.js
+<Route path="/indextooth" element={<IndexTooth collectors={collectors} />} />
+
+// src/pages/IndexTooth.js
+
+import React from "react"
+
+const IndexTooth = ({ collectors }) => {
+  console.log(collectors)
+  return (
+    // iterate through the array to access each object
+    // if no tooth collectors are rendered then the functionality handled by .map should be ignored and the rest of the page should render---> add a ? after collectors aka conditional rendering
+    <>
+      <h3>Greetings from the Tooth Collectors</h3>
+      {collectors?.map((collector, index) => {
+        return (
+          <>
+            <p>{collector.name}</p>
+            <img src={collector.image} alt={`profile of a Tooth Collector ${collector.name}`} />
+          </>
+        )
+      })}
+    </>
+  )
+}
+
+export default IndexTooth
+
+// stub out the tests we want to create. ensure page will load and user can see the cat cards
+// src/pages/IndexTooth.test.js
+
+import { render } from "@testing-library/react"
+import IndexTooth from "./IndexTooth"
+import mockCollectors from "../mockCollectors.js"
+
+describe("<IndexTooth />", () => {
+  it("renders without crashing", () => {
+    render(<IndexTooth collectors={mockCollectors />}>)
+    expect
+  })
+  it("renders collector cards", () => {})
+})
+```
