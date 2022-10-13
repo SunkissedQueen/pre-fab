@@ -25,7 +25,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutToothTale />} />
-          <Route path="/indextooth" element={<IndexTooth />} />
+          <Route 
+            path="/indextooth" 
+            element={<IndexTooth collectors={collectors}/>} 
+          />
           <Route path="/showtooth" element={<ShowTooth />} />
           <Route path="/newtooth" element={<NewTooth />} />
           <Route path="/toothrepair" element={<ToothRepair />} />

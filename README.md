@@ -217,6 +217,7 @@ const App = () => {
 <!-- add react-testing library dependencies -->
 - $ yarn add --dev @testing-library/dom
 - $ yarn add --dev @testing-library/react
+- $ yarn add --dev @testing-library/user-event @testing-library/dom
 - https://github.com/testing-library/jest-dom
 - $ bundle install
 
@@ -302,5 +303,59 @@ App.js:23 Uncaught ReferenceError: IndexTooth is not defined
 
 # Error not router component
     useLocation() may be used only in the context of a <Router> component.
-# Correction ... wrap component in Browser Router
+# Correction: wrap component in Browser Router
+
+# Error
+Warning: Each child in a list should have a unique "key" prop.
+# Correction: key={index} and index parameter on map hof
+```
+https://kentcdodds.com/blog/common-mistakes-with-react-testing-library
+<!-- test image -->
+https://github.com/testing-library/jest-dom#tohaveattribute
+<!-- test not found page -->
+
+
+```javascript
+//  Pass the collector variable from state into the IndexTooth component in src/App.js
+<Route path="/indextooth" element={<IndexTooth collectors={collectors} />} />
+
+// src/pages/IndexTooth.js
+
+import React from "react"
+
+const IndexTooth = ({ collectors }) => {
+  console.log(collectors)
+  return (
+    // iterate through the array to access each object
+    // if no tooth collectors are rendered then the functionality handled by .map should be ignored and the rest of the page should render---> add a ? after collectors aka conditional rendering
+    <>
+      <h3>Greetings from the Tooth Collectors</h3>
+      {collectors?.map((collector, index) => {
+        return (
+          <>
+            <p>{collector.name}</p>
+            <img src={collector.image} alt={`profile of a Tooth Collector ${collector.name}`} />
+          </>
+        )
+      })}
+    </>
+  )
+}
+
+export default IndexTooth
+
+// stub out the tests we want to create. ensure page will load and user can see the cat cards
+// src/pages/IndexTooth.test.js
+
+import { render } from "@testing-library/react"
+import IndexTooth from "./IndexTooth"
+import mockCollectors from "../mockCollectors.js"
+
+describe("<IndexTooth />", () => {
+  it("renders without crashing", () => {
+    render(<IndexTooth collectors={mockCollectors />}>)
+    expect
+  })
+  it("renders collector cards", () => {})
+})
 ```
