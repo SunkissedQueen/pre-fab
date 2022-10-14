@@ -1,5 +1,6 @@
 import React from "react"
-import { Card, CardBody } from "reactstrap"
+import { Button, Card, CardBody } from "reactstrap"
+import { NavLink } from "react-router-dom"
 
 const IndexTooth = ({ collectors }) => {
   console.log(collectors)
@@ -16,6 +17,11 @@ const IndexTooth = ({ collectors }) => {
               <p>{collector.name}</p>
             </CardBody>
             <img src={collector.image} alt={`profile of a Tooth Collector ${collector.name}`} />
+            <Button>
+              <NavLink to={`/showtooth/${collector.id}`} >
+                See More Details
+              </NavLink>
+            </Button>
           </Card>
         )
       })}
