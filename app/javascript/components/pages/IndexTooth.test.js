@@ -1,18 +1,27 @@
 import { fireEvent, render, screen } from "@testing-library/react"
 import '@testing-library/jest-dom'
+import {BrowserRouter} from 'react-router-dom'
 import IndexTooth from "./IndexTooth"
 import mockCollectors from "../mockCollector"
 
 describe("<IndexTooth />", () => {
   it("renders without crashing", () => {
-    render(<IndexTooth collectors={mockCollectors} />)
+    render(
+      <BrowserRouter>
+        <IndexTooth collectors={mockCollectors} />
+      </BrowserRouter>
+    )
     const indexHeading = screen.getByRole('heading')
     // screen.debug(indexHeading)
     expect(indexHeading).toHaveTextContent('Greetings from the Tooth Collectors')
   })
 
   it("renders collector cards", () => {
-    render(<IndexTooth collectors={mockCollectors} />)
+    render(
+      <BrowserRouter>
+        <IndexTooth collectors={mockCollectors} />
+      </BrowserRouter>
+    )
     mockCollectors.forEach((collector) => {
       const collectorName = screen.getByText(collector.name)
       // screen.debug(collectorName)
@@ -21,7 +30,11 @@ describe("<IndexTooth />", () => {
   })
 
   it("renders collector image", async () => {
-    render(<IndexTooth collectors={mockCollectors} />)
+    render(
+      <BrowserRouter>
+        <IndexTooth collectors={mockCollectors} />
+      </BrowserRouter>
+    )
     mockCollectors.forEach((collector) => {
       const collectorImage = screen.getAllByRole("img")
       expect(collectorImage.length).toBeGreaterThan(1)
