@@ -29,7 +29,9 @@ const App = () => {
             path="/indextooth" 
             element={<IndexTooth collectors={collectors}/>} 
           />
-          <Route path="/showtooth" element={<ShowTooth />} />
+          <Route 
+            path="/showtooth/:id"
+            element={<ShowTooth collectors={collectors}/>} />
           <Route path="/newtooth" element={<NewTooth />} />
           <Route path="/toothrepair" element={<ToothRepair />} />
           <Route path="*" element={<NoTeeth />} />

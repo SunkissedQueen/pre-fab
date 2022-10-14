@@ -217,6 +217,8 @@ const App = () => {
 <!-- add react-testing library dependencies -->
 - $ yarn add --dev @testing-library/dom
 - $ yarn add --dev @testing-library/react
+- $ yarn add react-scripts
+- $ yarn add --dev jsdom global-jsdom
 - $ yarn add --dev @testing-library/user-event @testing-library/dom
 - https://github.com/testing-library/jest-dom
 - $ bundle install
@@ -359,3 +361,50 @@ describe("<IndexTooth />", () => {
   it("renders collector cards", () => {})
 })
 ```
+<!-- Show Page -->
+```javascript
+// identify which collector should be displayed. Each collector object has a unique id that can be used to select one instance---> dynamically require a param in the url for the ShowTooth component and gives access to the collector array
+
+// src/App.js
+
+<Route path="/showtooth/:id" element={<ShowTooth collectors={collectors} />} />
+
+// useParams to access the param named id
+
+// src/pages/ShowTooth.js
+
+import React from "react"
+import { useParams } from "react-router-dom"
+
+const ShowTooth = ({ collectors }) => {
+  const { id } = useParams()
+  console.log(id)
+
+// .find() to return the first instance that matches the param id and the id of each collector object.
+// conditionally render the .find() method and also the content displaying the collector object
+// use a unary plus to convert the default data type of the param from string to number
+
+src/pages/ShowTooth.js
+
+const { id } = useParams()
+let currentCollector = collectors.find((collector) => collector.id === +id)
+console.log(currentCollector)
+// place collector data in a card
+    {currentCollector && (
+      <>
+        <img
+          src={currentCollector.image}
+          alt={`profile of a collector named ${currentCollector.name}`}
+        />
+          <CardBody>
+            <CardTitle tag="h5">{cat.name}</CardTitle>
+            <CardTitle tag="h5">
+              `${currentCollector.name} has been collecting teeth for ${currentCollector.tenure} years. This tooth collector gives back to the tooth fairy community by ${currentCollector.power}.`
+            </CardTitle>
+            <Button>See the Adventures of {currentCollector.name}</Button>
+          </CardBody>
+        </Card>
+      </>
+    )}
+```
+<!-- test NotFound page -->
